@@ -1,0 +1,71 @@
+{
+    "event": "library.new",
+    "user": true,
+    "owner": true,
+    "Account": {
+        "id": 1,
+        "thumb": "https://plex.tv/users/db9ce2c5e4a1c357/avatar?c=1577482198",
+        "title": "toddwardzinski"
+    },
+    "Server": {
+        "title": "DockeredPlex",
+        "uuid": "362e9db09d76a54200c376ab939274b53886d09f"
+    },
+    "Metadata": {
+        "librarySectionType": "show",
+        "ratingKey": "68470",
+        "key": "/library/metadata/68470",
+        "parentRatingKey": "68382",
+        "grandparentRatingKey": "68381",
+        "guid": "com.plexapp.agents.thetvdb://364093/1/1?lang=en",
+        "parentGuid": "com.plexapp.agents.thetvdb://364093/1?lang=en",
+        "grandparentGuid": "com.plexapp.agents.thetvdb://364093?lang=en",
+        "type": "episode",
+        "title": "Remembrance",
+        "grandparentKey": "/library/metadata/68381",
+        "parentKey": "/library/metadata/68382",
+        "grandparentTitle": "Star Trek: Picard",
+        "parentTitle": "Season 1",
+        "contentRating": "TV-14",
+        "summary": "At the end of the 24th Century, and 14 years after his retirement from Starfleet, Jean-Luc Picard is living a quiet life on his vineyard, Chateau Picard. When he is sought out by a mysterious young woman, Dahj, in need of his help, he soon realizes she may have personal connections to his own past.",
+        "index": 1,
+        "parentIndex": 1,
+        "year": 2020,
+        "thumb": "/library/metadata/68470/thumb/1580680454",
+        "art": "/library/metadata/68381/art/1580680454",
+        "parentThumb": "/library/metadata/68382/thumb/1580680454",
+        "grandparentThumb": "/library/metadata/68381/thumb/1580680454",
+        "grandparentArt": "/library/metadata/68381/art/1580680454",
+        "originallyAvailableAt": "2020-01-23",
+        "addedAt": 1580680445,
+        "updatedAt": 1580680454,
+        "chapterSource": "media",
+        "Writer": [
+            {
+                "id": 34525,
+                "filter": "writer=34525",
+                "tag": "Akiva Goldsman"
+            },
+            {
+                "id": 60119,
+                "filter": "writer=60119",
+                "tag": "Alex Kurtzman"
+            },
+            {
+                "id": 84507,
+                "filter": "writer=84507",
+                "tag": "James Duff"
+            },
+            {
+                "id": 55149,
+                "filter": "writer=55149",
+                "tag": "Kirsten Beyer"
+            },
+            {
+                "id": 83947,
+                "filter": "writer=83947",
+                "tag": "Michael Chabon"
+            }
+        ]
+    }
+}
