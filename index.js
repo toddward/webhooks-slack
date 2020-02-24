@@ -38,12 +38,8 @@ app.post('/', async function (req, res, next) {
   busboy.on('finish', async function () {
     if (payload) {
       console.log(JSON.stringify(payload));
-      if (payload.event === 'media.play') {
-        console.log(`sent a message to slack!:${msg}`);
-      } else if (payload.event === 'library.new') {
+      if (payload.event === 'library.new') {
         notifySlack(payload, "Manassas, VA", "New Media Added");
-      } else {
-        console.log(`noop for ${payload.event}`);
       }
     }
     res.writeHead(303, { Connection: 'close', Location: '/' });
