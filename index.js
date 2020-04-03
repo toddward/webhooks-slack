@@ -1,7 +1,7 @@
-const express = require('express');
-const morgan = require('morgan');
-const Slack = require('slack-node');
-const Busboy = require('busboy');
+const express = require("express");
+const morgan = require("morgan");
+const Slack = require("slack-node");
+const Busboy = require("busboy");
 
 const channel = process.env.SLACK_CHANNEL;
 
@@ -11,22 +11,29 @@ slack.setWebhook(process.env.SLACK_URL);
 const app = express();
 const port = process.env.PORT || 11000;
 
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.listen(port, () => {
   console.log(`Express app running at http://localhost:${port}`);
 });
 
-app.post('/', async function (req, res, next) {
+app.post("/", async function(req, res, next) {
   // We need to handle multipart returns...so...busboy to the rescue.
   const busboy = new Busboy({ headers: req.headers });
 
   let payload = null;
-  busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
+  busboy.on("file", function(fieldname, file, filename, encoding, mimetype) {
     file.resume(); // don't care about saving the poster
   });
 
-  busboy.on('field', function (fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
-    if (fieldname === 'payload') {
+  busboy.on("field", function(
+    fieldname,
+    val,
+    fieldnameTruncated,
+    valTruncated,
+    encoding,
+    mimetype
+  ) {
+    if (fieldname === "payload") {
       try {
         payload = JSON.parse(val);
       } catch (e) {
@@ -35,14 +42,14 @@ app.post('/', async function (req, res, next) {
     }
   });
 
-  busboy.on('finish', async function () {
+  busboy.on("finish", async function() {
     if (payload) {
       console.log(JSON.stringify(payload));
-      if (payload.event === 'library.new') {
+      if (payload.event === "library.new") {
         notifySlack(payload, "Manassas, VA", "New Media Added");
       }
     }
-    res.writeHead(303, { Connection: 'close', Location: '/' });
+    res.writeHead(303, { Connection: "close", Location: "/" });
     res.end();
   });
 
@@ -50,7 +57,7 @@ app.post('/', async function (req, res, next) {
 });
 
 app.use((req, res, next) => {
-  const err = new Error('Not Found');
+  const err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
@@ -65,17 +72,16 @@ app.use((err, req, res, next) => {
 // }
 
 function formatTitle(metadata) {
-  let mediaTypeString = '';
+  let mediaTypeString = "";
+
   if (metadata.type) {
-    if (metadata.type === 'movie') {
-      mediaTypeString = 'New Movie Added: ';
-    } else if (metadata.type === 'episode') {
-      mediaTypeString = 'New TV Show Added: ';
-    } else {
-      mediaTypeString = 'New Media: ';
+    if (metadata.type === "movie") {
+      mediaTypeString = "New Movie Added: ";
+    } else if (metadata.type === "episode") {
+      mediaTypeString = "New TV Show Added: ";
     }
   } else {
-    mediaTypeString = 'New Media: ';
+    return "";
   }
 
   if (metadata.grandparentTitle) {
@@ -90,10 +96,10 @@ function formatTitle(metadata) {
 }
 
 function formatSubtitle(metadata) {
-  let ret = '';
+  let ret = "";
 
   if (metadata.grandparentTitle) {
-    if (metadata.type === 'track') {
+    if (metadata.type === "track") {
       ret = metadata.parentTitle;
     } else if (metadata.index && metadata.parentIndex) {
       ret = `S${metadata.parentIndex} E${metadata.index}`;
@@ -102,9 +108,9 @@ function formatSubtitle(metadata) {
     }
 
     if (metadata.title) {
-      ret += ' - ' + metadata.title;
+      ret += " - " + metadata.title;
     }
-  } else if (metadata.type === 'movie') {
+  } else if (metadata.type === "movie") {
     ret = metadata.tagline;
   }
 
@@ -112,24 +118,29 @@ function formatSubtitle(metadata) {
 }
 
 function notifySlack(payload, location, action) {
-  let locationText = '';
+  let locationText = "";
 
   if (location) {
     // const state = location.country_code === 'US' ? location.region_name : location.country_name;
     locationText = `near ` + location;
   }
 
-  slack.webhook({
-    channel,
-    username: 'DockeredPlex',
-    icon_emoji: ':plex:',
-    attachments: [{
-      fallback: 'Required plain-text summary of the attachment.',
-      color: '#a67a2d',
-      title: formatTitle(payload.Metadata),
-      text: formatSubtitle(payload.Metadata),
-      footer: `${action} by ${payload.Account.title} on ${payload.Server.title} ${locationText}`,
-      footer_icon: payload.Account.thumb
-    }]
-  }, () => { });
+  slack.webhook(
+    {
+      channel,
+      username: "DockeredPlex",
+      icon_emoji: ":plex:",
+      attachments: [
+        {
+          fallback: "Required plain-text summary of the attachment.",
+          color: "#a67a2d",
+          title: formatTitle(payload.Metadata),
+          text: formatSubtitle(payload.Metadata),
+          footer: `${action} by ${payload.Account.title} on ${payload.Server.title} ${locationText}`,
+          footer_icon: payload.Account.thumb
+        }
+      ]
+    },
+    () => {}
+  );
 }
